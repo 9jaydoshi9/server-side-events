@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Server Side Events:JD</title>
+  </head>
+  <body>
+    <h1>Server Side Events</h1>
+    <ul id="list"></ul>
+    <script>
+      const ul = document.getElementById("list");
+      const source = new EventSource("http://localhost:3000/events");
+      source.addEventListener("message", (event) => {
+        const li = document.createElement("li");
+        li.appendChild(document.createTextNode(event.data));
+        ul.appendChild(li);
+      });
+
+      const getFreshStatus = () => {
+        fetch("http://localhost:3000/status")
+          .then((res) => res.json())
+          .then((data) =>
+            console.log(`There are ${data.connections} clients connected`)
+          );
+      };
+      getFreshStatus();
+    </script>
+  </body>
+</html>
